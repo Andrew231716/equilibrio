@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f7f4ef;
+  --bg-elevated: #fffcf7;
+  --fg: #1f2a24;
+  --muted: #5c6b62;
+  --border: #d9e0da;
+  --sage: #7fa88a;
+  --sage-deep: #4f7a5c;
+  --forest: #2f5d45;
+  --sand: #e8dfd0;
+  --cream: #f7f4ef;
+  --danger: #a65d4f;
+  --card-shadow: 0 8px 30px rgba(47, 93, 69, 0.08);
+  --radius: 1rem;
+  --nav-height: 4.25rem;
+}
+
+.dark {
+  --bg: #121916;
+  --bg-elevated: #1a221d;
+  --fg: #e8eee9;
+  --muted: #a3b1a8;
+  --border: #2c3a32;
+  --sage: #8fba9a;
+  --sage-deep: #6f9a7c;
+  --forest: #a8d0b4;
+  --sand: #243028;
+  --cream: #121916;
+  --danger: #d4877a;
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-forest: var(--forest);
+  --color-sand: var(--sand);
+  --color-cream: var(--cream);
+  --color-danger: var(--danger);
+  --color-elevated: var(--bg-elevated);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-fraunces);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--sage) 22%, transparent), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, color-mix(in oklab, var(--sand) 55%, transparent), transparent 55%),
+    var(--bg);
+  color: var(--fg);
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  min-height: 100dvh;
+}
+
+.font-display {
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+.card {
+  background: color-mix(in oklab, var(--bg-elevated) 92%, white);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+}
+
+.dark .card {
+  background: var(--bg-elevated);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.7rem 1.15rem;
+  font-weight: 560;
+  transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--forest);
+  color: #f7faf7;
+}
+
+.dark .btn-primary {
+  background: var(--sage-deep);
+  color: #0f1511;
+}
+
+.btn-secondary {
+  background: color-mix(in oklab, var(--sage) 18%, transparent);
+  color: var(--forest);
+}
+
+.dark .btn-secondary {
+  color: var(--sage);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  border-radius: 0.85rem;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--fg);
+  padding: 0.75rem 0.9rem;
+  outline: none;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: var(--sage-deep);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--sage) 30%, transparent);
+}
+
+.textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.page-pad {
+  padding: 1.25rem 1.1rem calc(var(--nav-height) + 1.5rem);
+}
+
+@media (min-width: 768px) {
+  .page-pad {
+    padding: 2rem 1.5rem 2.5rem;
+  }
+}
+
+.prose-eq p {
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 0.85rem;
+}
