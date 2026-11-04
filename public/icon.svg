@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="EQUILIBRIO">
+  <rect width="128" height="128" rx="28" fill="#F7F4EF"/>
+  <circle cx="64" cy="64" r="46" fill="#E8F0EA"/>
+  <path d="M64 98 C64 98 36 78 36 54 C36 42 45 34 56 34 C60.5 34 63.2 37 64 37.8 C64.8 37 67.5 34 72 34 C83 34 92 42 92 54 C92 78 64 98 64 98 Z" fill="#2F5D45"/>
+  <path d="M64 40 L64 90" stroke="#7FA88A" stroke-width="5" stroke-linecap="round"/>
+  <path d="M46 60 C54 55 58 50 64 46 C70 50 74 55 82 60" stroke="#A8D0B4" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="64" cy="32" r="4" fill="#4F7A5C"/>
+</svg>

@@ -18,6 +18,14 @@ export const metadata: Metadata = {
   description:
     "App interattiva per riconoscere e gestire lo stress: percorso 30 giorni, diario, strumenti S.T.A.R. e progressi. Dati locali, interfaccia in italiano.",
   applicationName: "EQUILIBRIO",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {
