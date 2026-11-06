@@ -11,8 +11,11 @@ import { useAppStore } from "@/stores/app-store";
 
 export default function LessonDayPage() {
   const params = useParams<{ day: string }>();
+  return <LessonContent key={params.day} day={Number(params.day)} />;
+}
+
+function LessonContent({ day }: { day: number }) {
   const router = useRouter();
-  const day = Number(params.day);
   const lesson = getLesson(day);
   const progress = useAppStore((s) => s.lessonProgress[day]);
   const upsert = useAppStore((s) => s.upsertLessonProgress);

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Card, SectionTitle } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import type { DiaryFormValues } from "@/lib/schemas";
+import { localDateTime } from "@/lib/utils";
 import { useAppStore } from "@/stores/app-store";
 
 export default function DiaryDetailPage() {
@@ -49,9 +50,10 @@ export default function DiaryDetailPage() {
       <Card>
         <SectionTitle title="Dettaglio" subtitle={saved ? "Salvato." : "Modifica e salva."} />
         <DiaryForm
+          key={entry.id}
           defaultValues={{
             ...entry,
-            datetime: entry.datetime.slice(0, 16),
+            datetime: localDateTime(entry.datetime),
           }}
           onSubmit={onSubmit}
           submitLabel="Aggiorna voce"

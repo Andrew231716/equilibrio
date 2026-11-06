@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
+import { DailyReminder } from "@/components/dashboard/DailyReminder";
 import { CheckInCard } from "@/components/dashboard/CheckInCard";
 import { Card, SectionTitle } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -95,6 +96,7 @@ export default function HomePage() {
         ) : null}
       </Card>
 
+      <DailyReminder />
       <CheckInCard />
 
       <Card>

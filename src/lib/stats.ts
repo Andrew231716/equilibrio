@@ -11,12 +11,13 @@ export function filterByRange<T extends { datetime?: string; date?: string; crea
 ): T[] {
   if (range === "all") return items;
   const days = Number(range);
-  const from = startOfDay(subDays(new Date(), days - 1));
+  const now = startOfDay(new Date());
+  const from = startOfDay(subDays(now, days - 1));
   return items.filter((item) => {
     const raw = (item[field] as string | undefined) ?? item.createdAt ?? "";
     if (!raw) return false;
     const d = startOfDay(parseISO(raw.length === 10 ? raw : raw));
-    return d >= from;
+    return d >= from && d <= now;
   });
 }
 
@@ -24,7 +25,7 @@ export function stressSeries(entries: StressEntry[], range: RangeKey) {
   const filtered = filterByRange(entries, range, "datetime");
   const map = new Map<string, number[]>();
   for (const e of filtered) {
-    const key = e.datetime.slice(0, 10);
+    const key = format(parseISO(e.datetime), "yyyy-MM-dd");
     const arr = map.get(key) ?? [];
     arr.push(e.stressIntensity);
     map.set(key, arr);

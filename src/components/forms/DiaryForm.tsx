@@ -1,11 +1,12 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { diarySchema, type DiaryFormValues } from "@/lib/schemas";
 import { DIARY_CATEGORIES, EMOTIONS } from "@/lib/constants";
 import { IntensitySlider } from "@/components/ui/IntensitySlider";
 import { Button } from "@/components/ui/Button";
+import { localDateTime } from "@/lib/utils";
 import type { EmotionId } from "@/types";
 
 export function DiaryForm({
@@ -21,14 +22,13 @@ export function DiaryForm({
     register,
     handleSubmit,
     control,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<DiaryFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(diarySchema) as any,
     defaultValues: {
-      datetime: defaultValues?.datetime ?? new Date().toISOString().slice(0, 16),
+      datetime: defaultValues?.datetime ?? localDateTime(),
       category: defaultValues?.category ?? "lavoro",
       description: defaultValues?.description ?? "",
       primaryEmotion: defaultValues?.primaryEmotion ?? "stressato",
@@ -45,8 +45,8 @@ export function DiaryForm({
     },
   });
 
-  const secondary = watch("secondaryEmotions") ?? [];
-  const primary = watch("primaryEmotion");
+  const secondary = useWatch({ control, name: "secondaryEmotions" }) ?? [];
+  const primary = useWatch({ control, name: "primaryEmotion" });
 
   function toggleSecondary(id: EmotionId) {
     if (id === primary) return;

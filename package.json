@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "TZ=Europe/Rome node tests/regression.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.2",

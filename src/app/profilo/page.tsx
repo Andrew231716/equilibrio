@@ -23,6 +23,7 @@ export default function ProfiloPage() {
   const [goalText, setGoalText] = useState("");
   const [confirmReset, setConfirmReset] = useState(false);
   const [confirmRestart, setConfirmRestart] = useState(false);
+  const [pendingImport, setPendingImport] = useState<string | null>(null);
   const [importMsg, setImportMsg] = useState("");
 
   return (
@@ -152,7 +153,7 @@ export default function ProfiloPage() {
             max={7}
             className="input"
             value={preferences.weeklyGoalDays}
-            onChange={(e) => updatePreferences({ weeklyGoalDays: Number(e.target.value) })}
+            onChange={(e) => updatePreferences({ weeklyGoalDays: Math.min(7, Math.max(1, Number(e.target.value) || 1)) })}
           />
         </div>
       </Card>
@@ -160,8 +161,8 @@ export default function ProfiloPage() {
       <Card>
         <SectionTitle title="Privacy e backup" />
         <p className="mb-3 text-sm text-[var(--muted)]">
-          Nessun invio automatico a servizi esterni. Export/import in JSON. Pronto per un sync cloud futuro
-          (Supabase) senza riscrivere il modello dati.
+          I dati sono salvati nel browser di questo dispositivo. Esporta un backup prima di cambiare
+          dispositivo o cancellare i dati del browser. Importare un backup sostituisce i dati attuali.
         </p>
         <label className="mb-4 flex items-center gap-2 text-sm">
           <input
@@ -190,9 +191,18 @@ export default function ProfiloPage() {
             onChange={async (e) => {
               const file = e.target.files?.[0];
               if (!file) return;
-              const text = await file.text();
-              const res = importData(text);
-              setImportMsg(res.ok ? "Import completato." : res.error ?? "Errore import");
+              try {
+                if (file.size > 10 * 1024 * 1024) {
+                  setImportMsg("File troppo grande: massimo 10 MB.");
+                  return;
+                }
+                const text = await file.text();
+                setPendingImport(text);
+              } catch {
+                setImportMsg("Impossibile leggere il file. Riprova.");
+              } finally {
+                e.target.value = "";
+              }
             }}
           />
         </div>
@@ -215,6 +225,18 @@ export default function ProfiloPage() {
         </p>
       </Card>
 
+      <ConfirmDialog
+        open={pendingImport !== null}
+        title="Importare il backup?"
+        description="Il backup sostituirà tutti i dati attuali su questo dispositivo. Esporta prima una copia se vuoi conservarli."
+        confirmLabel="Importa e sostituisci"
+        onCancel={() => setPendingImport(null)}
+        onConfirm={() => {
+          const result = importData(pendingImport ?? "");
+          setImportMsg(result.ok ? "Importazione completata." : result.error ?? "Errore importazione");
+          setPendingImport(null);
+        }}
+      />
       <ConfirmDialog
         open={confirmReset}
         title="Eliminare tutti i dati?"

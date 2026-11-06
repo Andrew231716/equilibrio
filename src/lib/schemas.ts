@@ -32,7 +32,7 @@ export const checkInSchema = z.object({
 });
 
 export const diarySchema = z.object({
-  datetime: z.string().min(1, "Data e ora obbligatorie"),
+  datetime: z.string().min(1, "Data e ora obbligatorie").refine((v) => Number.isFinite(Date.parse(v)), "Data e ora non valide"),
   category: categorySchema,
   description: z.string().min(3, "Descrivi la situazione (min. 3 caratteri)"),
   primaryEmotion: emotionSchema,

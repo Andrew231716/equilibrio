@@ -17,6 +17,7 @@ import type {
   UserPreferences,
   WeeklyReview,
 } from "@/types";
+import { backupSchema } from "@/lib/backup";
 import { LESSONS } from "@/data/lessons";
 
 const defaultPreferences = (): UserPreferences => ({
@@ -248,8 +249,9 @@ export const useAppStore = create<EquilibrioStore>()(
 
       importData: (json) => {
         try {
-          const data = JSON.parse(json) as Partial<AppState> & { version?: number };
-          if (!data || typeof data !== "object") return { ok: false, error: "File non valido" };
+          const parsed = backupSchema.safeParse(JSON.parse(json));
+          if (!parsed.success) return { ok: false, error: "Backup non valido o versione non supportata. I dati attuali non sono stati modificati." };
+          const data = parsed.data;
           set({
             preferences: { ...defaultPreferences(), ...(data.preferences ?? {}) },
             checkIns: data.checkIns ?? [],

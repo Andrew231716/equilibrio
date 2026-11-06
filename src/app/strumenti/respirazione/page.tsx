@@ -23,7 +23,7 @@ export default function RespirazionePage() {
         const next = cycle + 1;
         if (next >= cycles) {
           setPhase("idle");
-          setCycle(0);
+          setCycle(next);
         } else {
           setCycle(next);
           setPhase("inhale");
@@ -38,13 +38,13 @@ export default function RespirazionePage() {
       toolId="respirazione"
       title="Respirazione guidata"
       description="Ritmi personalizzabili, senza apnee forzate. Preferisci un espirio più lungo dell'inspiro."
-      canSave={true}
+      canSave={phase === "idle" && cycle > 0}
       collect={() => ({ inhale, exhale, cycles, note, completedCycles: cycle })}
     >
       <div className="mb-4 grid gap-3 sm:grid-cols-3">
-        <NumberField label="Inspiro (s)" value={inhale} min={2} max={8} onChange={setInhale} />
-        <NumberField label="Espirio (s)" value={exhale} min={3} max={10} onChange={setExhale} />
-        <NumberField label="Cicli" value={cycles} min={1} max={12} onChange={setCycles} />
+        <NumberField label="Inspiro (s)" value={inhale} min={2} max={8} onChange={setInhale} disabled={phase !== "idle"} />
+        <NumberField label="Espirio (s)" value={exhale} min={3} max={10} onChange={setExhale} disabled={phase !== "idle"} />
+        <NumberField label="Cicli" value={cycles} min={1} max={12} onChange={setCycles} disabled={phase !== "idle"} />
       </div>
       <div className="mb-5 flex flex-col items-center py-6">
         <motion.div
@@ -62,7 +62,7 @@ export default function RespirazionePage() {
           Ciclo {Math.min(cycle + (phase === "idle" ? 0 : 1), cycles)} / {cycles}
         </p>
         <div className="mt-4 flex gap-2">
-          <Button type="button" onClick={() => { setCycle(0); setPhase("inhale"); }}>
+          <Button type="button" disabled={phase !== "idle"} onClick={() => { setCycle(0); setPhase("inhale"); }}>
             Avvia
           </Button>
           <Button type="button" variant="secondary" onClick={() => setPhase("idle")}>
@@ -81,12 +81,14 @@ function NumberField({
   onChange,
   min,
   max,
+  disabled,
 }: {
   label: string;
   value: number;
   onChange: (n: number) => void;
   min: number;
   max: number;
+  disabled: boolean;
 }) {
   return (
     <div>
@@ -94,10 +96,12 @@ function NumberField({
       <input
         type="number"
         className="input"
+        disabled={disabled}
+        aria-label={label}
         min={min}
         max={max}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => onChange(Math.min(max, Math.max(min, Number(e.target.value) || min)))}
       />
     </div>
   );

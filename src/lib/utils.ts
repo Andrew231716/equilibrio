@@ -16,6 +16,10 @@ export function todayKey(date = new Date()): string {
   return format(date, "yyyy-MM-dd");
 }
 
+export function localDateTime(date: string | Date = new Date()): string {
+  return format(typeof date === "string" ? parseISO(date) : date, "yyyy-MM-dd'T'HH:mm");
+}
+
 export function formatDateIT(date: string | Date, pattern = "d MMMM yyyy"): string {
   const d = typeof date === "string" ? parseISO(date) : date;
   return format(d, pattern, { locale: it });

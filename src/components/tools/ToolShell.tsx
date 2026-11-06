@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card, SectionTitle } from "@/components/ui/Card";
@@ -23,7 +23,8 @@ export function ToolShell({
   canSave: boolean;
 }) {
   const saveToolSession = useAppStore((s) => s.saveToolSession);
-  const [saved, setSaved] = useState(false);
+  const [savedData, setSavedData] = useState<string | null>(null);
+  const saved = savedData === JSON.stringify(collect());
 
   return (
     <div className="space-y-4">
@@ -40,10 +41,11 @@ export function ToolShell({
         <div className="mt-5 flex flex-wrap gap-2">
           <Button
             type="button"
-            disabled={!canSave}
+            disabled={!canSave || saved}
             onClick={() => {
-              saveToolSession(toolId, collect());
-              setSaved(true);
+              const data = collect();
+              saveToolSession(toolId, data);
+              setSavedData(JSON.stringify(data));
             }}
           >
             {saved ? "Salvato" : "Salva sessione"}
@@ -65,10 +67,12 @@ export function ToolField({
   onChange: (v: string) => void;
   placeholder?: string;
 }) {
+  const id = useId();
   return (
     <div className="mb-3">
-      <label className="label">{label}</label>
+      <label className="label" htmlFor={id}>{label}</label>
       <textarea
+        id={id}
         className="textarea"
         value={value}
         onChange={(e) => onChange(e.target.value)}
